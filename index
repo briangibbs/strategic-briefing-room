@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strategic Briefing Room</title>
+    <title>Strategic Briefing Room | AI Decision Engine</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #F9F8F6; color: #0f172a; }
         .font-serif { font-family: 'Playfair Display', serif; }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #0f172a;
-            cursor: pointer;
-        }
+        .card { background: white; border: 1px solid #e2e8f0; border-radius: 2px; }
+        input[type="range"] { -webkit-appearance: none; background: #e2e8f0; height: 4px; border-radius: 2px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #0f172a; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        @media print { .no-print { display: none; } .print-only { display: block; } }
+        .print-only { display: none; }
     </style>
 </head>
 <body>
@@ -28,99 +25,261 @@
     <script type="text/babel">
         const { useState } = React;
 
-        const StrategicApp = () => {
+        const App = () => {
             const [step, setStep] = useState(1);
-            const [context, setContext] = useState({ revenue: '', risk: 5 });
+            const [data, setData] = useState({
+                revenue: '$1M - $5M',
+                priorities: '',
+                constraints: '',
+                risk: 5,
+                problem: '',
+                owner: '',
+                failEffect: '',
+                reversibility: 'Yes',
+                timing: 'Now',
+                opportunities: [
+                    { id: 1, name: 'Client Onboarding', status: 'Worth Exploring', desc: 'Automating data collection.' },
+                    { id: 2, name: 'Sales Intelligence', status: 'Monitor', desc: 'Lead scoring and intent data.' }
+                ]
+            });
 
-            const nextStep = () => setStep(step + 1);
+            const next = () => setStep(step + 1);
+            const prev = () => setStep(step - 1);
 
             return (
-                <div className="min-h-screen bg-[#F9F8F6] text-slate-900 pb-20">
-                    <nav className="fixed top-0 w-full h-1.5 bg-slate-200 z-50">
-                        <div className="h-full bg-slate-900 transition-all duration-700" style={{ width: `${(step / 5) * 100}%` }} />
+                <div className="min-h-screen">
+                    {/* Header */}
+                    <nav className="fixed top-0 w-full bg-white/80 border-b border-slate-100 z-50 px-8 py-4 flex justify-between items-center no-print">
+                        <span className="text-[10px] font-bold tracking-[0.3em] uppercase opacity-50">Strategic Briefing Room</span>
+                        <div className="flex gap-2">
+                            {[1,2,3,4,5,6,7].map(s => (
+                                <div key={s} className={`h-1 w-4 transition-all ${step >= s ? 'bg-slate-900' : 'bg-slate-200'}`} />
+                            ))}
+                        </div>
                     </nav>
 
-                    <main className="max-w-4xl mx-auto pt-24 px-6">
+                    <main className="max-w-4xl mx-auto pt-24 pb-32 px-6">
+
+                        {/* 1. WELCOME */}
                         {step === 1 && (
-                            <div className="space-y-8">
-                                <header className="space-y-4">
-                                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">Strategic Briefing Room</p>
-                                    <h1 className="font-serif text-6xl leading-tight text-slate-900">Think clearly.<br/>Then decide.</h1>
-                                </header>
-                                <div className="border-l-2 border-slate-900 pl-8 py-2">
-                                    <p className="text-xl text-slate-700 italic">"This workspace exists to protect your focus. Define your AI posture."</p>
+                            <div className="space-y-8 animate-in fade-in duration-1000">
+                                <h1 className="font-serif text-6xl leading-tight">Clarity over execution.</h1>
+                                <p className="text-xl text-slate-600 italic border-l-4 border-slate-900 pl-6 py-2">
+                                    "This workspace exists to help you think clearly and make decisions. It’s not a task manager or tool selector."
+                                </p>
+                                <div className="grid md:grid-cols-2 gap-4 mt-12">
+                                    <div className="p-6 card">
+                                        <h3 className="font-bold text-xs uppercase mb-2">The Process</h3>
+                                        <p className="text-sm text-slate-500">A structured briefing to anchor AI in your reality.</p>
+                                    </div>
+                                    <div className="p-6 card">
+                                        <h3 className="font-bold text-xs uppercase mb-2">Timeline</h3>
+                                        <p className="text-sm text-slate-500">20 minutes to strategic posture.</p>
+                                    </div>
                                 </div>
-                                <button onClick={nextStep} className="mt-12 px-10 py-4 bg-slate-900 text-white font-bold tracking-widest uppercase text-sm">Enter Briefing</button>
+                                <button onClick={next} className="bg-slate-900 text-white px-10 py-4 font-bold uppercase tracking-widest text-xs">Begin Briefing</button>
                             </div>
                         )}
 
+                        {/* 2. BUSINESS CONTEXT */}
                         {step === 2 && (
-                            <div className="space-y-12">
-                                <h2 className="font-serif text-4xl">The Strategic Lens</h2>
-                                <div className="space-y-10">
+                            <div className="space-y-10 animate-in fade-in">
+                                <h2 className="font-serif text-4xl">02. Business Context</h2>
+                                <div className="space-y-8">
                                     <div className="space-y-4">
                                         <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Revenue Range</label>
-                                        <div className="flex gap-4">
-                                            {['$1M-$5M', '$5M-$20M', '$20M+'].map(r => (
-                                                <button key={r} onClick={() => setContext({...context, revenue: r})} className={`px-8 py-4 border ${context.revenue === r ? 'bg-slate-900 text-white' : 'border-slate-300'}`}>{r}</button>
+                                        <div className="flex gap-3">
+                                            {['$1M - $5M', '$5M - $20M', '$20M+'].map(r => (
+                                                <button key={r} onClick={() => setData({...data, revenue: r})} className={`px-6 py-3 border transition-all ${data.revenue === r ? 'bg-slate-900 text-white border-slate-900' : 'bg-white hover:border-slate-400'}`}>{r}</button>
                                             ))}
                                         </div>
                                     </div>
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Strategic Priorities</label>
+                                            <textarea className="w-full p-4 border rounded-none focus:outline-none focus:ring-1 focus:ring-slate-900" rows="3" onChange={(e) => setData({...data, priorities: e.target.value})} placeholder="What must happen this year?" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Constraints</label>
+                                            <textarea className="w-full p-4 border rounded-none focus:outline-none focus:ring-1 focus:ring-slate-900" rows="3" onChange={(e) => setData({...data, constraints: e.target.value})} placeholder="What is holding you back?" />
+                                        </div>
+                                    </div>
                                     <div className="space-y-4">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Risk Appetite</label>
-                                        <input type="range" className="w-full h-1 bg-slate-200 appearance-none" onChange={(e) => setContext({...context, risk: e.target.value})} />
+                                        <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Risk Tolerance ({data.risk}/10)</label>
+                                        <input type="range" min="1" max="10" className="w-full" value={data.risk} onChange={(e) => setData({...data, risk: e.target.value})} />
                                     </div>
                                 </div>
-                                <button onClick={nextStep} className="text-sm font-bold border-b-2 border-slate-900 pb-1">CONTINUE →</button>
+                                <div className="flex gap-4">
+                                    <button onClick={prev} className="px-10 py-4 border font-bold uppercase text-xs">Back</button>
+                                    <button onClick={next} className="px-10 py-4 bg-slate-900 text-white font-bold uppercase text-xs">Continue</button>
+                                </div>
                             </div>
                         )}
 
+                        {/* 3. AI REALITY CHECK */}
                         {step === 3 && (
-                            <div className="space-y-10">
-                                <h2 className="font-serif text-4xl">Signal vs. Noise</h2>
-                                <div className="grid gap-6">
-                                    <div className="bg-white p-8 border border-slate-200 grid md:grid-cols-2 gap-8">
-                                        <div><span className="text-[10px] font-bold text-red-500 uppercase">The Hype</span><p className="mt-2 font-medium">AI will replace your team.</p></div>
-                                        <div className="border-l border-slate-100 pl-8"><span className="text-[10px] font-bold text-emerald-600 uppercase">The Reality</span><p className="mt-2 text-slate-600">AI automates tasks, not people.</p></div>
+                            <div className="space-y-10 animate-in fade-in">
+                                <h2 className="font-serif text-4xl">03. AI Reality Check</h2>
+                                <div className="prose text-slate-600 max-w-none">
+                                    <p className="text-lg leading-relaxed">AI is not a "replacement" strategy; it is a **leverage** strategy. For a company in the {data.revenue} range, the goal is to reduce the cost of cognitive labor.</p>
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div className="p-8 card border-l-4 border-l-emerald-500">
+                                        <h4 className="font-bold uppercase text-xs mb-3 tracking-widest">The Signal (Use AI)</h4>
+                                        <ul className="text-sm space-y-2 opacity-70 italic">
+                                            <li>• Data Summarization</li>
+                                            <li>• First-draft generation</li>
+                                            <li>• Pattern recognition in CRM</li>
+                                        </ul>
+                                    </div>
+                                    <div className="p-8 card border-l-4 border-l-rose-500">
+                                        <h4 className="font-bold uppercase text-xs mb-3 tracking-widest">The Noise (Avoid AI)</h4>
+                                        <ul className="text-sm space-y-2 opacity-70 italic">
+                                            <li>• High-stakes client empathy</li>
+                                            <li>• Novel strategic pivots</li>
+                                            <li>• "Set and forget" support</li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <button onClick={nextStep} className="text-sm font-bold border-b-2 border-slate-900 pb-1 uppercase">Identify Opportunities →</button>
+                                <button onClick={next} className="px-10 py-4 bg-slate-900 text-white font-bold uppercase tracking-widest text-xs">Identify Opportunity Areas</button>
                             </div>
                         )}
 
+                        {/* 4. OPPORTUNITY AREAS */}
                         {step === 4 && (
-                            <div className="space-y-12">
-                                <h2 className="font-serif text-4xl">The Decision Gate</h2>
-                                <div className="bg-slate-900 text-white p-10 space-y-6">
-                                    <h3 className="text-2xl font-serif italic">"What specific business problem does this solve?"</h3>
-                                    <textarea className="w-full bg-transparent border-b border-slate-700 py-4 focus:outline-none focus:border-white italic text-xl" placeholder="Describe the friction..."></textarea>
+                            <div className="space-y-10 animate-in fade-in">
+                                <h2 className="font-serif text-4xl">04. Opportunity Areas</h2>
+                                <div className="space-y-4">
+                                    {data.opportunities.map((opp, i) => (
+                                        <div key={opp.id} className="p-6 card flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                            <div>
+                                                <h4 className="font-bold text-lg">{opp.name}</h4>
+                                                <p className="text-sm text-slate-500">{opp.desc}</p>
+                                            </div>
+                                            <select 
+                                                className="border p-2 text-xs font-bold uppercase tracking-widest"
+                                                value={opp.status}
+                                                onChange={(e) => {
+                                                    const newOpps = [...data.opportunities];
+                                                    newOpps[i].status = e.target.value;
+                                                    setData({...data, opportunities: newOpps});
+                                                }}
+                                            >
+                                                <option>Worth Exploring</option>
+                                                <option>Monitor</option>
+                                                <option>Not Relevant</option>
+                                            </select>
+                                        </div>
+                                    ))}
                                 </div>
-                                <button onClick={nextStep} className="bg-slate-900 text-white px-10 py-4 font-bold uppercase text-sm">Finalize Roadmap</button>
+                                <button onClick={next} className="px-10 py-4 bg-slate-900 text-white font-bold uppercase tracking-widest text-xs">Move to Decision Framework</button>
                             </div>
                         )}
 
+                        {/* 5. DECISION FRAMEWORK */}
                         {step === 5 && (
-                            <div className="space-y-12">
-                                <div className="text-center space-y-4">
-                                    <h2 className="font-serif text-5xl">Strategic Roadmap</h2>
-                                    <p className="text-slate-500 uppercase tracking-widest text-xs">For {context.revenue} Operations</p>
+                            <div className="space-y-10 animate-in fade-in">
+                                <h2 className="font-serif text-4xl">05. Decision Framework</h2>
+                                <p className="text-slate-500">Run your primary idea through the logic gate.</p>
+                                <div className="space-y-8">
+                                    {[
+                                        { q: "What problem does this actually solve?", k: "problem" },
+                                        { q: "Who owns the outcome?", k: "owner" },
+                                        { q: "What breaks if this fails?", k: "failEffect" }
+                                    ].map(field => (
+                                        <div key={field.k} className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest">{field.q}</label>
+                                            <input className="w-full p-4 border focus:ring-1 focus:ring-slate-900 outline-none" onChange={(e) => setData({...data, [field.k]: e.target.value})} />
+                                        </div>
+                                    ))}
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest">Is this reversible?</label>
+                                            <select className="w-full p-4 border" onChange={(e) => setData({...data, reversibility: e.target.value})}>
+                                                <option>Yes</option>
+                                                <option>No</option>
+                                            </select>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest">Is now the right time?</label>
+                                            <select className="w-full p-4 border" onChange={(e) => setData({...data, timing: e.target.value})}>
+                                                <option>Now</option>
+                                                <option>Later</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="grid md:grid-cols-3 gap-1 bg-slate-200 p-px">
-                                    <div className="bg-white p-10">
-                                        <h4 className="text-xs font-bold text-emerald-600 uppercase mb-6">Do Now</h4>
-                                        <p className="text-sm">CRM Data Cleanup</p>
+                                <button onClick={next} className="px-10 py-4 bg-slate-900 text-white font-bold uppercase tracking-widest text-xs">Generate Roadmap</button>
+                            </div>
+                        )}
+
+                        {/* 6. THE ROADMAP */}
+                        {step === 6 && (
+                            <div className="space-y-10 animate-in fade-in">
+                                <h2 className="font-serif text-4xl text-center">06. The Roadmap</h2>
+                                <div className="grid md:grid-cols-3 gap-1 bg-slate-200">
+                                    <div className="bg-white p-8 space-y-4">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-emerald-600">Do Now</h4>
+                                        <div className="p-3 bg-emerald-50 text-xs font-bold">{data.problem ? "Solve: " + data.problem : "Operational CRM Audit"}</div>
+                                        <p className="text-[10px] text-slate-400 italic">Rationale: High reversibility, identified bottleneck.</p>
                                     </div>
-                                    <div className="bg-white p-10">
-                                        <h4 className="text-xs font-bold text-amber-500 uppercase mb-6">Consider Later</h4>
-                                        <p className="text-sm">Custom LLM Training</p>
+                                    <div className="bg-white p-8 space-y-4">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-amber-500">Consider Later</h4>
+                                        {data.opportunities.filter(o => o.status === 'Monitor').map(o => (
+                                            <div key={o.id} className="p-3 bg-amber-50 text-xs font-bold">{o.name}</div>
+                                        ))}
                                     </div>
-                                    <div className="bg-white p-10">
-                                        <h4 className="text-xs font-bold text-slate-400 uppercase mb-6">Do Not Do</h4>
-                                        <p className="text-sm">AI Content Farm</p>
+                                    <div className="bg-white p-8 space-y-4">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Do Not Do</h4>
+                                        <div className="p-3 bg-slate-50 text-xs font-bold text-slate-400">Low-Leverage Tool Hopping</div>
+                                        {data.opportunities.filter(o => o.status === 'Not Relevant').map(o => (
+                                            <div key={o.id} className="p-3 bg-slate-50 text-xs font-bold text-slate-400">{o.name}</div>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className="text-center pt-8">
-                                    <button onClick={() => window.print()} className="px-10 py-4 border-2 border-slate-900 font-bold uppercase text-sm hover:bg-slate-900 hover:text-white transition-all">Download Summary</button>
+                                    <button onClick={next} className="px-10 py-4 border-2 border-slate-900 font-bold uppercase text-xs">View Summary for Sharing</button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 7. SUMMARY FOR SHARING */}
+                        {step === 7 && (
+                            <div className="space-y-12 animate-in fade-in">
+                                <div className="p-12 card shadow-xl space-y-8 border-t-8 border-t-slate-900" id="final-report">
+                                    <header className="flex justify-between items-start border-b pb-8">
+                                        <div className="space-y-1">
+                                            <h2 className="font-serif text-3xl">Executive Strategic Briefing</h2>
+                                            <p className="text-xs text-slate-400 uppercase tracking-widest">AI Posture: {data.risk > 7 ? 'Aggressive' : 'Balanced'}</p>
+                                        </div>
+                                        <div className="text-right text-[10px] font-bold text-slate-400">DATE: 2026</div>
+                                    </header>
+
+                                    <section className="grid md:grid-cols-2 gap-12">
+                                        <div className="space-y-4">
+                                            <h4 className="text-xs font-bold uppercase tracking-widest border-b pb-2">Business Lens</h4>
+                                            <p className="text-sm"><strong>Primary Priority:</strong> {data.priorities || "Not defined"}</p>
+                                            <p className="text-sm"><strong>Constraints:</strong> {data.constraints || "Standard SMB barriers"}</p>
+                                        </div>
+                                        <div className="space-y-4">
+                                            <h4 className="text-xs font-bold uppercase tracking-widest border-b pb-2">Primary Initiative</h4>
+                                            <p className="text-sm"><strong>Focus:</strong> {data.problem || "Efficiency Gains"}</p>
+                                            <p className="text-sm"><strong>Owner:</strong> {data.owner || "CEO"}</p>
+                                        </div>
+                                    </section>
+
+                                    <section className="bg-slate-50 p-6">
+                                        <h4 className="text-xs font-bold uppercase tracking-widest mb-4">Talking Points for Leadership</h4>
+                                        <p className="text-sm italic text-slate-600 font-serif leading-relaxed">
+                                            "We are prioritizing {data.problem || "workflow automation"} because it directly addresses our bottleneck of {data.constraints}. 
+                                            We are currently ignoring speculative AI tools to maintain our focus on {data.priorities}."
+                                        </p>
+                                    </section>
+                                </div>
+                                
+                                <div className="text-center no-print">
+                                    <button onClick={() => window.print()} className="bg-slate-900 text-white px-10 py-4 font-bold uppercase tracking-widest text-xs">Print / Export PDF</button>
+                                    <button onClick={() => setStep(1)} className="block mx-auto mt-6 text-xs font-bold text-slate-400 uppercase tracking-widest">Reset Briefing</button>
                                 </div>
                             </div>
                         )}
@@ -130,7 +289,7 @@
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<StrategicApp />);
+        root.render(<App />);
     </script>
 </body>
 </html>
