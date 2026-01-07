@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Briefing Room</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #0f172a;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const StrategicApp = () => {
+            const [step, setStep] = useState(1);
+            const [context, setContext] = useState({ revenue: '', risk: 5 });
+
+            const nextStep = () => setStep(step + 1);
+
+            return (
+                <div className="min-h-screen bg-[#F9F8F6] text-slate-900 pb-20">
+                    <nav className="fixed top-0 w-full h-1.5 bg-slate-200 z-50">
+                        <div className="h-full bg-slate-900 transition-all duration-700" style={{ width: `${(step / 5) * 100}%` }} />
+                    </nav>
+
+                    <main className="max-w-4xl mx-auto pt-24 px-6">
+                        {step === 1 && (
+                            <div className="space-y-8">
+                                <header className="space-y-4">
+                                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">Strategic Briefing Room</p>
+                                    <h1 className="font-serif text-6xl leading-tight text-slate-900">Think clearly.<br/>Then decide.</h1>
+                                </header>
+                                <div className="border-l-2 border-slate-900 pl-8 py-2">
+                                    <p className="text-xl text-slate-700 italic">"This workspace exists to protect your focus. Define your AI posture."</p>
+                                </div>
+                                <button onClick={nextStep} className="mt-12 px-10 py-4 bg-slate-900 text-white font-bold tracking-widest uppercase text-sm">Enter Briefing</button>
+                            </div>
+                        )}
+
+                        {step === 2 && (
+                            <div className="space-y-12">
+                                <h2 className="font-serif text-4xl">The Strategic Lens</h2>
+                                <div className="space-y-10">
+                                    <div className="space-y-4">
+                                        <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Revenue Range</label>
+                                        <div className="flex gap-4">
+                                            {['$1M-$5M', '$5M-$20M', '$20M+'].map(r => (
+                                                <button key={r} onClick={() => setContext({...context, revenue: r})} className={`px-8 py-4 border ${context.revenue === r ? 'bg-slate-900 text-white' : 'border-slate-300'}`}>{r}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Risk Appetite</label>
+                                        <input type="range" className="w-full h-1 bg-slate-200 appearance-none" onChange={(e) => setContext({...context, risk: e.target.value})} />
+                                    </div>
+                                </div>
+                                <button onClick={nextStep} className="text-sm font-bold border-b-2 border-slate-900 pb-1">CONTINUE →</button>
+                            </div>
+                        )}
+
+                        {step === 3 && (
+                            <div className="space-y-10">
+                                <h2 className="font-serif text-4xl">Signal vs. Noise</h2>
+                                <div className="grid gap-6">
+                                    <div className="bg-white p-8 border border-slate-200 grid md:grid-cols-2 gap-8">
+                                        <div><span className="text-[10px] font-bold text-red-500 uppercase">The Hype</span><p className="mt-2 font-medium">AI will replace your team.</p></div>
+                                        <div className="border-l border-slate-100 pl-8"><span className="text-[10px] font-bold text-emerald-600 uppercase">The Reality</span><p className="mt-2 text-slate-600">AI automates tasks, not people.</p></div>
+                                    </div>
+                                </div>
+                                <button onClick={nextStep} className="text-sm font-bold border-b-2 border-slate-900 pb-1 uppercase">Identify Opportunities →</button>
+                            </div>
+                        )}
+
+                        {step === 4 && (
+                            <div className="space-y-12">
+                                <h2 className="font-serif text-4xl">The Decision Gate</h2>
+                                <div className="bg-slate-900 text-white p-10 space-y-6">
+                                    <h3 className="text-2xl font-serif italic">"What specific business problem does this solve?"</h3>
+                                    <textarea className="w-full bg-transparent border-b border-slate-700 py-4 focus:outline-none focus:border-white italic text-xl" placeholder="Describe the friction..."></textarea>
+                                </div>
+                                <button onClick={nextStep} className="bg-slate-900 text-white px-10 py-4 font-bold uppercase text-sm">Finalize Roadmap</button>
+                            </div>
+                        )}
+
+                        {step === 5 && (
+                            <div className="space-y-12">
+                                <div className="text-center space-y-4">
+                                    <h2 className="font-serif text-5xl">Strategic Roadmap</h2>
+                                    <p className="text-slate-500 uppercase tracking-widest text-xs">For {context.revenue} Operations</p>
+                                </div>
+                                <div className="grid md:grid-cols-3 gap-1 bg-slate-200 p-px">
+                                    <div className="bg-white p-10">
+                                        <h4 className="text-xs font-bold text-emerald-600 uppercase mb-6">Do Now</h4>
+                                        <p className="text-sm">CRM Data Cleanup</p>
+                                    </div>
+                                    <div className="bg-white p-10">
+                                        <h4 className="text-xs font-bold text-amber-500 uppercase mb-6">Consider Later</h4>
+                                        <p className="text-sm">Custom LLM Training</p>
+                                    </div>
+                                    <div className="bg-white p-10">
+                                        <h4 className="text-xs font-bold text-slate-400 uppercase mb-6">Do Not Do</h4>
+                                        <p className="text-sm">AI Content Farm</p>
+                                    </div>
+                                </div>
+                                <div className="text-center pt-8">
+                                    <button onClick={() => window.print()} className="px-10 py-4 border-2 border-slate-900 font-bold uppercase text-sm hover:bg-slate-900 hover:text-white transition-all">Download Summary</button>
+                                </div>
+                            </div>
+                        )}
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<StrategicApp />);
+    </script>
+</body>
+</html>
